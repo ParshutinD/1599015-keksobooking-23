@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Даниил Паршутин](https://up.htmlacademy.ru/javascript/23/user/1599015).
-* Наставник: `Неизвестно`.
+* Наставник: [Егор Глебов](https://htmlacademy.ru/profile/beast)}.
 
 ---
 
