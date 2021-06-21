@@ -21,7 +21,7 @@ function getRandomFloat(min, max, floatPoint) {
 getRandomFloat();
 
 // Генерация данных
-let xx = getRandomInt(0,10);
+let xx = getRandomInt(1,10);
 
 if(xx < 10) {
   xx = `0${  xx}`;
