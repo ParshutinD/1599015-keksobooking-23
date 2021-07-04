@@ -8,7 +8,7 @@ if(xx < 10) {
 }
 
 const AUTHOR = {
-  avatar: `img/avatars/user{${xx}}.png`,
+  avatar: `img/avatars/user${xx}.png`,
 };
 
 const typeList = ['palace','flat','house','bungalow','hotel'];
@@ -23,7 +23,7 @@ const resultsFeaturesList = featuresList
 
 const resultsPhotosList = photosList
   .sort(() => .5 - Math.random())
-  .slice(0, getRandomInt(1,3));
+  .slice(0, getRandomInt(1,1));
 
 
 const LOCATION = {
@@ -33,7 +33,7 @@ const LOCATION = {
 
 const OFFER = {
   title: 'Информация о жилье',
-  address: `{${LOCATION.lat}}, {${LOCATION.lng}}`,
+  address: `${LOCATION.lat}, ${LOCATION.lng}`,
   price: getRandomInt(1, 999999),
   type: typeList[getRandomInt(0,4)],
   rooms: getRandomInt(1, 999999),
@@ -55,7 +55,11 @@ function createObject () {
 const SIMILAR_ADS_COUNT = 10;
 
 
-const similarAds = new Array(SIMILAR_ADS_COUNT).fill(null).map(() => createObject());
+const similarAds = () => new Array(SIMILAR_ADS_COUNT).fill(null).map(() => createObject());
 
 // eslint-disable-next-line no-console
-console.log(similarAds);
+console.log(similarAds());
+
+export{similarAds,featuresList,OFFER};
+
+
