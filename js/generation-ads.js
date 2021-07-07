@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+
 import {similarAds,featuresList} from './data.js';
 
 const similarAdsTemplate = document.querySelector('#card').content;
@@ -9,7 +9,7 @@ const generationSimilarAds = similarAds();
 
 const similarListFragment = document.createDocumentFragment();
 
-// eslint-disable-next-line no-unused-vars
+
 const featuresListElement = document.querySelector('.popup__features');
 const modifiers = featuresList.map((feature) => `popup__feature--${feature}`);
 document.querySelectorAll('.popup__feature').forEach((item) => {

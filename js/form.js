@@ -40,4 +40,67 @@ const activeForm = function () {
   mapFiltersArr.forEach((element) => element.removeAttribute('disabled', 'disabled'));
 };
 
+// Валидации формы добавления объявления
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
 
+titleInput.addEventListener('input', () => {
+  const valueLength = titleInput.value.length;
+  if (valueLength < MIN_TITLE_LENGTH) {
+    titleInput.setCustomValidity(`Ещё ${  MIN_TITLE_LENGTH - valueLength } символов`);
+  } else if (valueLength > MAX_TITLE_LENGTH) {
+    titleInput.setCustomValidity(`Удалите лишние ${  valueLength - MAX_TITLE_LENGTH } символы`);
+  } else {
+    titleInput.setCustomValidity('');
+  }
+
+  titleInput.reportValidity();
+});
+
+
+priceInput.addEventListener('input', () => {
+  priceInput.reportValidity('');
+});
+
+// Валидация формы количество комнат и количество мест
+const capacityOption = capacitySelect.querySelectorAll('option');
+
+const guestsInTheRoom = {
+  '1': {
+    value: 1,
+    items: [2],
+  },
+  '2': {
+    value: 2,
+    items: [1, 2],
+  },
+  '3': {
+    value: 3,
+    items: [0, 1, 2],
+  },
+  '100': {
+    value: 0,
+    items: [3],
+  },
+};
+
+const guestsOptionCount = 4;
+
+const setAllOptions = function (count) {
+  for (let i = 0; i < count; i++) {
+    capacityOption[i].classList.add('hidden');
+    if (capacityOption[i].selected === true) {
+      capacityOption[i].removeAttribute('selected');
+    }
+  }
+};
+
+const disableCapacityOption = function() {
+  setAllOptions(guestsOptionCount);
+  guestsInTheRoom[roomNumberSelect.value].items.forEach((item) => {
+    capacityOption[item].classList.remove('hidden');
+  });
+  capacitySelect.value = guestsInTheRoom[roomNumberSelect.value].value;
+};
+
+roomNumberSelect.addEventListener('change',disableCapacityOption);
