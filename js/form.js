@@ -104,4 +104,3 @@ const disableCapacityOption = function() {
 };
 
 roomNumberSelect.addEventListener('change',disableCapacityOption);
-
