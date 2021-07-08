@@ -104,3 +104,45 @@ const disableCapacityOption = function() {
 };
 
 roomNumberSelect.addEventListener('change',disableCapacityOption);
+
+//Валидация «Тип жилья»
+const typeHousing = {
+  'bungalow': {
+    value: 0,
+
+  },
+  'flat': {
+    value: 1000,
+
+  },
+  'hotel': {
+    value: 3000,
+
+  },
+  'house': {
+    value: 5000,
+
+  },
+  'palace': {
+    value: 10000,
+  },
+};
+
+const choiceHousing = function () {
+  priceInput.value = typeHousing[typeInput.value].value;
+};
+
+typeInput.addEventListener('change', choiceHousing);
+
+// Валидация «Время заезда», «Время выезда»
+
+const timeInInputChange = function (evt) {
+  timeOutInput.value = evt.target.value;
+};
+
+const timeOutInputChange = function (evt) {
+  timeInInput.value = evt.target.value;
+};
+
+timeInInput.addEventListener('change', timeInInputChange);
+timeOutInput.addEventListener('change', timeOutInputChange);
