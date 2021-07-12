@@ -21,3 +21,4 @@ function getRandomFloat(min, max, floatPoint) {
 getRandomFloat();
 
 export {getRandomInt, getRandomFloat};
+
