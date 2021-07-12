@@ -11,7 +11,9 @@ const similarListFragment = document.createDocumentFragment();
 
 
 const featuresListElement = document.querySelector('.popup__features');
+
 const modifiers = featuresList.map((feature) => `popup__feature--${feature}`);
+
 document.querySelectorAll('.popup__feature').forEach((item) => {
   const modifier = item.classList[1];
   if (!modifiers.includes(modifier)) {
@@ -43,6 +45,6 @@ generationSimilarAds.forEach(({offer,author}) => {
   similarListFragment.appendChild(adsElement);
 });
 
-similarListElement.appendChild(similarListFragment);
+/*  similarListElement.appendChild(similarListFragment); */
 
-
+export{modifiers};

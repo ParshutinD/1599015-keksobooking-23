@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
     <title>Кексобукинг</title>
   </head>
   <body>
@@ -194,7 +195,7 @@
             <label class="ad-form__label" for="address"
               >Адрес (координаты)</label
             >
-            <input id="address" name="address" type="text" />
+            <input id="address" name="address" type="text" readonly />
           </fieldset>
           <fieldset class="ad-form__element">
             <label class="ad-form__label" for="type">Тип жилья</label>
@@ -208,7 +209,14 @@
           </fieldset>
           <fieldset class="ad-form__element">
             <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-            <input id="price" name="price" type="number" required placeholder="5000" max="1000000" />
+            <input
+              id="price"
+              name="price"
+              type="number"
+              required
+              placeholder="5000"
+              max="1000000"
+            />
           </fieldset>
           <fieldset class="ad-form__element ad-form__element--time">
             <label class="ad-form__label" for="timein"
@@ -472,5 +480,7 @@
       </div>
     </template>
     <script src="js/main.js" type="module"></script>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="leaflet/leaflet.js.map"></script>
   </body>
 </html>

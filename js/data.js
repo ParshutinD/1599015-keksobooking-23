@@ -57,9 +57,4 @@ const SIMILAR_ADS_COUNT = 10;
 
 const similarAds = () => new Array(SIMILAR_ADS_COUNT).fill(null).map(() => createObject());
 
-// eslint-disable-next-line no-console
-console.log(similarAds());
-
-export{similarAds,featuresList,OFFER};
-
-
+export{similarAds,featuresList,OFFER,AUTHOR};

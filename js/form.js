@@ -40,6 +40,8 @@ const activeForm = function () {
   mapFiltersArr.forEach((element) => element.removeAttribute('disabled', 'disabled'));
 };
 
+disableForm();
+
 // Валидации формы добавления объявления
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -146,3 +148,6 @@ const timeOutInputChange = function (evt) {
 
 timeInInput.addEventListener('change', timeInInputChange);
 timeOutInput.addEventListener('change', timeOutInputChange);
+
+
+export{activeForm,addressInput};
