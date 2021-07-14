@@ -1,3 +1,5 @@
+import {showAlert,isEscEvent} from './util.js';
+import {getData,sendData} from './api.js';
 // Форма объявления
 const adForm = document.querySelector('.ad-form');
 const adFormHeader = document.querySelector('.ad-form-header');
@@ -63,6 +65,9 @@ titleInput.addEventListener('input', () => {
 priceInput.addEventListener('input', () => {
   priceInput.reportValidity('');
 });
+
+
+
 
 // Валидация формы количество комнат и количество мест
 const capacityOption = capacitySelect.querySelectorAll('option');
@@ -149,5 +154,49 @@ const timeOutInputChange = function (evt) {
 timeInInput.addEventListener('change', timeInInputChange);
 timeOutInput.addEventListener('change', timeOutInputChange);
 
+const createMessageError = () => {
+  const erorrTemplate = document.querySelector('#error').content.querySelector('.error');
+  const popupError = erorrTemplate.cloneNode(true);
+  const errorBtn = popupError.querySelector('.error__button');
+  errorBtn.addEventListener('click', () => {
+    popupError.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      popupError.remove();
+    };
+  });
+  document.body.append(popupError);
+};
 
-export{activeForm,addressInput};
+const createMessagesuccess = () => {
+  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const popupSuccess = successTemplate.cloneNode(true);
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      popupSuccess.remove();
+      adForm.reset();
+    };
+  });
+  document.addEventListener('mousedown', () => {
+    popupSuccess.remove();
+    adForm.reset();
+  });
+  document.body.append(popupSuccess);
+};
+
+
+const formSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => createMessagesuccess(),
+      () => createMessageError(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+formSubmit();
+
+export{activeForm,addressInput,resetButton,formSubmit,adForm};

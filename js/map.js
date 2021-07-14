@@ -1,6 +1,6 @@
-import { activeForm, addressInput } from './form.js';
-import { similarAds} from './data.js';
-import {modifiers} from './generation-ads.js';
+import { activeForm, addressInput,resetButton,adForm } from './form.js';
+import {modifiers,similarListFragment,similarListElement} from './generation-ads.js';
+import {similarAds} from './data.js';
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -46,9 +46,8 @@ mainPinMarker.on('moveend', (evt) => {
 });
 
 const adsArr = similarAds();
-const balloonTemplate = document
-  .querySelector('#card')
-  .content.querySelector('.popup');
+
+const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
 const popupElement = balloonTemplate.cloneNode(true);
 
 const popupTitle = popupElement.querySelector('.popup__title');
@@ -80,8 +79,8 @@ const typeList = {
   hotel: 'Отель',
 };
 
-const createCustomPopup = () => {
-  adsArr.forEach(({ offer, author }) => {
+const createCustomPopup = (semilarAds) => {
+  semilarAds.forEach(({ offer, author }) => {
     popupTitle.textContent = offer.title;
     popupAddress.textContent = `Координаты: ${offer.address}`;
     popupPrice.textContent = `${offer.price} ₽/ночь`;
@@ -97,26 +96,37 @@ const createCustomPopup = () => {
   return popupElement;
 };
 
+const createPinMarker = (semilarAds) => {
+  for (let i = 0; i < semilarAds.length; i++) {
+    const pinIcon = L.icon({
+      iconUrl: 'img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+    const pinMarker = L.marker(
+      {
+        lat: semilarAds[i].location.lat,
+        lng: semilarAds[i].location.lng,
+      },
+      {
+        icon: pinIcon,
+      },
+    );
+    pinMarker.addTo(map);
+    pinMarker.bindPopup(createCustomPopup(semilarAds),
+    );
+  }
+};
 
-for (let i = 0; i < adsArr.length; i++) {
-  const pinIcon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+  mainPinMarker.setLatLng({
+    lat: 35.68951,
+    lng: 139.69171,
   });
-
-  const pinMarker = L.marker(
-    {
-      lat: adsArr[i].location.lat,
-      lng: adsArr[i].location.lng,
-    },
-    {
-      icon: pinIcon,
-    },
-  );
-
-  pinMarker.addTo(map);
-  pinMarker.bindPopup(createCustomPopup());
-}
+  addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
+});
 
 
+export{createCustomPopup,createPinMarker};
