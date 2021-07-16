@@ -20,8 +20,6 @@ function getRandomFloat(min, max, floatPoint) {
 
 getRandomFloat();
 
-const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
-
 const ALERT_SHOW_TIME = 5000;
 
 const showAlert = (message) => {
@@ -45,5 +43,5 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomInt, getRandomFloat,showAlert,isEscEvent};
+export {getRandomInt, getRandomFloat,showAlert};
 

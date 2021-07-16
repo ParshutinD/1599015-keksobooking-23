@@ -1,5 +1,6 @@
-import {showAlert,isEscEvent} from './util.js';
+import {showAlert} from './util.js';
 import {getData,sendData} from './api.js';
+
 // Форма объявления
 const adForm = document.querySelector('.ad-form');
 const adFormHeader = document.querySelector('.ad-form-header');
@@ -172,13 +173,13 @@ const createMessageError = () => {
 const createMessagesuccess = () => {
   const successTemplate = document.querySelector('#success').content.querySelector('.success');
   const popupSuccess = successTemplate.cloneNode(true);
-  document.addEventListener('keydown', (evt) => {
+  popupSuccess.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       popupSuccess.remove();
       adForm.reset();
     };
   });
-  document.addEventListener('mousedown', () => {
+  popupSuccess.addEventListener('mousedown', () => {
     popupSuccess.remove();
     adForm.reset();
   });
@@ -189,14 +190,17 @@ const createMessagesuccess = () => {
 const formSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
     sendData(
       () => createMessagesuccess(),
       () => createMessageError(),
-      new FormData(evt.target),
+      formData,
     );
   });
 };
 
-formSubmit();
+
 
 export{activeForm,addressInput,resetButton,formSubmit,adForm};
