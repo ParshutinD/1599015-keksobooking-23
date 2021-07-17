@@ -1,10 +1,10 @@
-import { activeForm, addressInput } from './form.js';
-import { similarAds} from './data.js';
-import {modifiers} from './generation-ads.js';
-
+import {activeForm, addressInput,resetButton,adForm,formSubmit} from './form.js';
+import {modifiers,similarListFragment,similarListElement} from './generation-ads.js';
+import {similarAds} from './data.js';
 const map = L.map('map-canvas')
   .on('load', () => {
     activeForm();
+    formSubmit();
   })
   .setView(
     {
@@ -45,32 +45,6 @@ mainPinMarker.on('moveend', (evt) => {
   )}`;
 });
 
-const adsArr = similarAds();
-const balloonTemplate = document
-  .querySelector('#card')
-  .content.querySelector('.popup');
-const popupElement = balloonTemplate.cloneNode(true);
-
-const popupTitle = popupElement.querySelector('.popup__title');
-const popupAddress = popupElement.querySelector('.popup__text--address');
-const popupPrice = popupElement.querySelector('.popup__text--price');
-const popupType = popupElement.querySelector('.popup__type');
-const popupCapacity = popupElement.querySelector('.popup__text--capacity');
-const popupTime = popupElement.querySelector('.popup__text--time');
-const popupFeatures = popupElement.querySelector('.popup__features');
-const popupDescription = popupElement.querySelector('.popup__description');
-const popupPhoto = popupElement.querySelector('.popup__photo');
-const popupAvatar = popupElement.querySelector('.popup__avatar');
-
-const createFeatureElement = function () {
-  const featureFragment = document.createDocumentFragment();
-  modifiers.forEach((item) => {
-    const featureItem = document.createElement('li');
-    featureItem.className = `popup__feature ${  item}`;
-    featureFragment.appendChild(featureItem);
-  });
-  return featureFragment;
-};
 
 const typeList = {
   flat: 'Квартира',
@@ -80,43 +54,83 @@ const typeList = {
   hotel: 'Отель',
 };
 
-const createCustomPopup = () => {
-  adsArr.forEach(({ offer, author }) => {
-    popupTitle.textContent = offer.title;
-    popupAddress.textContent = `Координаты: ${offer.address}`;
-    popupPrice.textContent = `${offer.price} ₽/ночь`;
-    popupType.textContent = typeList[offer.type];
-    popupCapacity.textContent = `${offer.rooms} комнат для ${offer.guests} гостей`;
-    popupTime.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-    popupFeatures.innerHTML = '';
-    popupFeatures.appendChild(createFeatureElement());
-    popupDescription.textContent = offer.description;
-    popupPhoto.src = offer.photos;
-    popupAvatar.src = author.avatar;
-  });
+const pinIcon = L.icon({
+  iconUrl: 'img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
+
+const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
+
+const createCustomPopup = (semilarAds) => {
+  const popupElement = balloonTemplate.cloneNode(true);
+  popupElement.querySelector('.popup__title').textContent = semilarAds.offer.title;
+  popupElement.querySelector('.popup__text--address').textContent = semilarAds.offer.address;
+  popupElement.querySelector('.popup__text--price').textContent = `${semilarAds.offer.price} ₽/ночь`;
+  popupElement.querySelector('.popup__type').textContent = typeList[semilarAds.offer.type];
+  popupElement.querySelector('.popup__text--capacity').textContent = `${semilarAds.offer.rooms  } комнат для ${  semilarAds.offer.guests  } гостей`;
+  popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${  semilarAds.offer.checkin  }, выезд до ${  semilarAds.offer.checkout}`;
+  popupElement.querySelector('.popup__description').textContent = semilarAds.offer.description;
+  popupElement.querySelector('.popup__avatar').src = semilarAds.author.avatar;
+
+
+  popupElement.querySelector('.popup__features').innerHTML = '';
+  if (semilarAds.offer.features) {
+    semilarAds.offer.features.forEach((item) => {
+      const feature = document.createElement('li');
+      const featureClass = `popup__feature--${item}`;
+      feature.classList.add('popup__feature', featureClass);
+      popupElement.querySelector('.popup__features').appendChild(feature);
+    });
+  } else {
+    popupElement.querySelector('.popup__features').classList.add('hidden');
+  }
+
+  const photoListElementFragment = document.createDocumentFragment();
+  const popupPhotos = popupElement.querySelector('.popup__photos');
+  if (semilarAds.offer.photos) {
+    semilarAds.offer.photos.forEach((photo) => {
+      const photoElement =  popupPhotos.querySelector('.popup__photo').cloneNode(true);
+      photoElement.src = photo;
+      photoListElementFragment.appendChild(photoElement);
+    });
+    popupPhotos.innerHTML = '';
+    popupPhotos.appendChild(photoListElementFragment);
+  } else {
+    popupPhotos.classList.add('hidden');
+  }
+
   return popupElement;
 };
 
 
-for (let i = 0; i < adsArr.length; i++) {
-  const pinIcon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+const createPinMarker = (semilarAds) => {
+  for (let i = 0; i < semilarAds.length;i++ ) {
+    const pinMarker = L.marker(
+      {
+        lat: semilarAds[i].location.lat,
+        lng: semilarAds[i].location.lng,
+      },
+      {
+        icon: pinIcon,
+      },
+    );
+    pinMarker.addTo(map);
+    pinMarker.bindPopup(createCustomPopup(semilarAds[i]),
+      {
+        keepInView: true,
+      });
+  }
+};
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+  mainPinMarker.setLatLng({
+    lat: 35.68951,
+    lng: 139.69171,
   });
+  addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
+});
 
-  const pinMarker = L.marker(
-    {
-      lat: adsArr[i].location.lat,
-      lng: adsArr[i].location.lng,
-    },
-    {
-      icon: pinIcon,
-    },
-  );
-
-  pinMarker.addTo(map);
-  pinMarker.bindPopup(createCustomPopup());
-}
-
-
+export{mainPinMarker,createCustomPopup,createPinMarker};

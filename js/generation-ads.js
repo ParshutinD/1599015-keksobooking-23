@@ -1,5 +1,6 @@
-
 import {similarAds,featuresList} from './data.js';
+import {showAlert} from './util.js';
+
 
 const similarAdsTemplate = document.querySelector('#card').content;
 
@@ -45,6 +46,4 @@ generationSimilarAds.forEach(({offer,author}) => {
   similarListFragment.appendChild(adsElement);
 });
 
-/*  similarListElement.appendChild(similarListFragment); */
-
-export{modifiers};
+export{modifiers,similarListFragment,similarListElement};

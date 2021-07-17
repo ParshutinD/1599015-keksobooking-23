@@ -1,3 +1,7 @@
+import {showAlert} from './util.js';
+import {getData,sendData} from './api.js';
+/* import {createMessagesuccess} from './map.js'; */
+
 // Форма объявления
 const adForm = document.querySelector('.ad-form');
 const adFormHeader = document.querySelector('.ad-form-header');
@@ -63,6 +67,7 @@ titleInput.addEventListener('input', () => {
 priceInput.addEventListener('input', () => {
   priceInput.reportValidity('');
 });
+
 
 // Валидация формы количество комнат и количество мест
 const capacityOption = capacitySelect.querySelectorAll('option');
@@ -149,5 +154,78 @@ const timeOutInputChange = function (evt) {
 timeInInput.addEventListener('change', timeInInputChange);
 timeOutInput.addEventListener('change', timeOutInputChange);
 
+const createMessageError = () => {
+  const erorrTemplate = document.querySelector('#error').content.querySelector('.error');
+  const popupError = erorrTemplate.cloneNode(true);
+  const errorBtn = popupError.querySelector('.error__button');
+  errorBtn.addEventListener('click', () => {
+    popupError.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      popupError.remove();
+    };
+  });
+  document.body.append(popupError);
+};
+const mainPinIcon = L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
 
-export{activeForm,addressInput};
+const mainPinMarker = L.marker(
+  {
+    lat: 35.68951,
+    lng: 139.69171,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+const createMessagesuccess = () => {
+  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const popupSuccess = successTemplate.cloneNode(true);
+  popupSuccess.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      popupSuccess.remove();
+      adForm.reset();
+      mainPinMarker.setLatLng({
+        lat: 35.68951,
+        lng: 139.69171,
+      });
+      addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
+    };
+  });
+  popupSuccess.addEventListener('mousedown', () => {
+    popupSuccess.remove();
+    adForm.reset();
+    mainPinMarker.setLatLng({
+      lat: 35.68951,
+      lng: 139.69171,
+    });
+    addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
+  });
+
+  document.body.append(popupSuccess);
+};
+
+
+const formSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    sendData(
+      () => createMessagesuccess(),
+      () => createMessageError(),
+      formData,
+    );
+  });
+};
+
+
+
+export{activeForm,addressInput,resetButton,formSubmit,adForm};
