@@ -1,5 +1,6 @@
 import {showAlert} from './util.js';
 import {getData,sendData} from './api.js';
+/* import {createMessagesuccess} from './map.js'; */
 
 // Форма объявления
 const adForm = document.querySelector('.ad-form');
@@ -66,8 +67,6 @@ titleInput.addEventListener('input', () => {
 priceInput.addEventListener('input', () => {
   priceInput.reportValidity('');
 });
-
-
 
 
 // Валидация формы количество комнат и количество мест
@@ -169,7 +168,22 @@ const createMessageError = () => {
   });
   document.body.append(popupError);
 };
+const mainPinIcon = L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
 
+const mainPinMarker = L.marker(
+  {
+    lat: 35.68951,
+    lng: 139.69171,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
 const createMessagesuccess = () => {
   const successTemplate = document.querySelector('#success').content.querySelector('.success');
   const popupSuccess = successTemplate.cloneNode(true);
@@ -177,12 +191,23 @@ const createMessagesuccess = () => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       popupSuccess.remove();
       adForm.reset();
+      mainPinMarker.setLatLng({
+        lat: 35.68951,
+        lng: 139.69171,
+      });
+      addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
     };
   });
   popupSuccess.addEventListener('mousedown', () => {
     popupSuccess.remove();
     adForm.reset();
+    mainPinMarker.setLatLng({
+      lat: 35.68951,
+      lng: 139.69171,
+    });
+    addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
   });
+
   document.body.append(popupSuccess);
 };
 

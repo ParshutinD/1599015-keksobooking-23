@@ -10,8 +10,7 @@ import {getData} from './api.js';
 const SIMILAR_ADS_COUNT = 10;
 
 getData((ads) => {
-  console.log(createCustomPopup(ads));
-  createPinMarker(ads.slice(0, SIMILAR_ADS_COUNT));
+  createPinMarker(ads.slice(0,SIMILAR_ADS_COUNT));
 });
 
 
