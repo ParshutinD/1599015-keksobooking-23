@@ -1,6 +1,4 @@
-import {activeForm, addressInput,resetButton,adForm,formSubmit} from './form.js';
-import {modifiers,similarListFragment,similarListElement} from './generation-ads.js';
-import {similarAds} from './data.js';
+import {activeForm, addressInput,resetButton,adForm,mapFilters,formSubmit,previewAvatar,previewHousing} from './form.js';
 const map = L.map('map-canvas')
   .on('load', () => {
     activeForm();
@@ -63,6 +61,7 @@ const pinIcon = L.icon({
 const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const createCustomPopup = (semilarAds) => {
+
   const popupElement = balloonTemplate.cloneNode(true);
   popupElement.querySelector('.popup__title').textContent = semilarAds.offer.title;
   popupElement.querySelector('.popup__text--address').textContent = semilarAds.offer.address;
@@ -104,33 +103,42 @@ const createCustomPopup = (semilarAds) => {
 };
 
 
+const markerGroup = L.layerGroup().addTo(map);
+const removeAllPins = () => markerGroup.clearLayers();
+
 const createPinMarker = (semilarAds) => {
-  for (let i = 0; i < semilarAds.length;i++ ) {
-    const pinMarker = L.marker(
-      {
-        lat: semilarAds[i].location.lat,
-        lng: semilarAds[i].location.lng,
-      },
-      {
-        icon: pinIcon,
-      },
-    );
-    pinMarker.addTo(map);
-    pinMarker.bindPopup(createCustomPopup(semilarAds[i]),
+  const pin = L.marker(
+    semilarAds.location,
+    {
+      icon: pinIcon,
+    },
+  );
+  pin
+    .addTo(markerGroup)
+    .bindPopup(
+      createCustomPopup(semilarAds),
       {
         keepInView: true,
-      });
-  }
+      },
+    );
 };
 
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  adForm.reset();
-  mainPinMarker.setLatLng({
-    lat: 35.68951,
-    lng: 139.69171,
+const setResetButtonClick = (callback) => {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    adForm.reset();
+    mapFilters.reset();
+    previewAvatar.src= 'img/muffin-grey.svg';
+    previewHousing.innerHTML='';
+    mainPinMarker.setLatLng({
+      lat: 35.68951,
+      lng: 139.69171,
+    });
+    addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
+    callback();
   });
-  addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
-});
 
-export{mainPinMarker,createCustomPopup,createPinMarker};
+};
+
+
+export{mainPinMarker,createCustomPopup,createPinMarker,removeAllPins,setResetButtonClick};

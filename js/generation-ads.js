@@ -1,5 +1,4 @@
 import {similarAds,featuresList} from './data.js';
-import {showAlert} from './util.js';
 
 
 const similarAdsTemplate = document.querySelector('#card').content;
@@ -10,8 +9,6 @@ const generationSimilarAds = similarAds();
 
 const similarListFragment = document.createDocumentFragment();
 
-
-const featuresListElement = document.querySelector('.popup__features');
 
 const modifiers = featuresList.map((feature) => `popup__feature--${feature}`);
 
