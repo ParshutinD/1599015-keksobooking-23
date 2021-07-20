@@ -1,3 +1,4 @@
+const ALERT_SHOW_TIME = 5000;
 function getRandomInt(min, max) {
   if (max >= min && max >= 0 && min >= 0) {
     min = Math.ceil(min);
@@ -20,7 +21,6 @@ function getRandomFloat(min, max, floatPoint) {
 
 getRandomFloat();
 
-const ALERT_SHOW_TIME = 5000;
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');

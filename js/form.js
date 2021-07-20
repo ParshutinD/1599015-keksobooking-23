@@ -1,6 +1,7 @@
 /* eslint-disable id-length */
 import {sendData} from './api.js';
-
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
 
 // Форма объявления
 const adForm = document.querySelector('.ad-form');
@@ -49,8 +50,6 @@ const activeForm = function () {
 disableForm();
 
 // Валидации формы добавления объявления
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
 
 titleInput.addEventListener('input', () => {
   const valueLength = titleInput.value.length;
@@ -261,7 +260,6 @@ const createMessagesuccess = () => {
     });
     addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
   });
-
   document.body.append(popupSuccess);
 };
 
