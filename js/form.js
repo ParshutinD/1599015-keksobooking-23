@@ -1,6 +1,6 @@
 /* eslint-disable id-length */
 import {sendData} from './api.js';
-import {resetMainPinMarker} from './map.js';
+import {resetMainPinMarker,mainPinMarker} from './map.js';
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
@@ -219,11 +219,6 @@ fileChooserHousing.addEventListener('change', () => {
   }
 });
 
-const mainPinMarker = L.marker(
-  {
-    lat: 35.68951,
-    lng: 139.69171,
-  });
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const popupSuccess = successTemplate.cloneNode(true);
