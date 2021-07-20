@@ -1,5 +1,5 @@
-import './form.js';
 import './map.js';
+import './form.js';
 import './api.js';
 import './filters.js';
 import {debounce} from './utils/debounce.js';

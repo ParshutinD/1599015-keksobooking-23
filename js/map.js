@@ -1,4 +1,5 @@
-import {activeForm, addressInput,resetButton,adForm,mapFilters,formSubmit,previewAvatar,previewHousing} from './form.js';
+import {activeForm,addressInput,resetButton,adForm,mapFilters,formSubmit,previewAvatar,previewHousing} from './form.js';
+
 const map = L.map('map-canvas')
   .on('load', () => {
     activeForm();
@@ -11,7 +12,6 @@ const map = L.map('map-canvas')
     },
     10,
   );
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -123,6 +123,13 @@ const createPinMarker = (semilarAds) => {
     );
 };
 
+const resetMainPinMarker = () => {
+  mainPinMarker.setLatLng({
+    lat: 35.68951,
+    lng: 139.69171,
+  });
+};
+
 const setResetButtonClick = (callback) => {
   resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
@@ -130,15 +137,10 @@ const setResetButtonClick = (callback) => {
     mapFilters.reset();
     previewAvatar.src= 'img/muffin-grey.svg';
     previewHousing.innerHTML='';
-    mainPinMarker.setLatLng({
-      lat: 35.68951,
-      lng: 139.69171,
-    });
+    resetMainPinMarker();
     addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
     callback();
   });
-
 };
 
-
-export{mainPinMarker,createCustomPopup,createPinMarker,removeAllPins,setResetButtonClick};
+export{resetMainPinMarker,mainPinMarker,createCustomPopup,createPinMarker,removeAllPins,setResetButtonClick};

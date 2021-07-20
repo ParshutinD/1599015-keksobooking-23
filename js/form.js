@@ -1,5 +1,6 @@
 /* eslint-disable id-length */
 import {sendData} from './api.js';
+import {resetMainPinMarker} from './map.js';
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
@@ -39,6 +40,7 @@ const disableFilterForm = function () {
   mapFilters.classList.add('ad-form--disabled');
   mapFiltersArr.forEach((element) => element.setAttribute('disabled', 'disabled'));
 };
+
 const activeForm = function () {
   adForm.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('ad-form--disabled');
@@ -169,22 +171,6 @@ const createMessageError = () => {
   });
   document.body.append(popupError);
 };
-const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
-});
-
-const mainPinMarker = L.marker(
-  {
-    lat: 35.68951,
-    lng: 139.69171,
-  },
-  {
-    draggable: true,
-    icon: mainPinIcon,
-  },
-);
 
 // Uploading avatar
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
@@ -233,36 +219,38 @@ fileChooserHousing.addEventListener('change', () => {
   }
 });
 
-const createMessagesuccess = () => {
-  const successTemplate = document.querySelector('#success').content.querySelector('.success');
-  const popupSuccess = successTemplate.cloneNode(true);
-  popupSuccess.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      popupSuccess.remove();
-      adForm.reset();
-      previewAvatar.src= 'img/muffin-grey.svg';
-      previewHousing.innerHTML='';
-      mainPinMarker.setLatLng({
-        lat: 35.68951,
-        lng: 139.69171,
-      });
-      addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
-    }
+const mainPinMarker = L.marker(
+  {
+    lat: 35.68951,
+    lng: 139.69171,
   });
+
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const popupSuccess = successTemplate.cloneNode(true);
+
+const removePopup = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    resetMainPinMarker();
+    popupSuccess.remove();
+    adForm.reset();
+    previewAvatar.src= 'img/muffin-grey.svg';
+    previewHousing.innerHTML='';
+    addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
+  }
+};
+
+const createMessageSuccess = () => {
+  document.body.append(popupSuccess);
+  document.addEventListener('keydown', removePopup, { once: true });
   popupSuccess.addEventListener('mousedown', () => {
     popupSuccess.remove();
     adForm.reset();
     previewAvatar.src= 'img/muffin-grey.svg';
     previewHousing.innerHTML='';
-    mainPinMarker.setLatLng({
-      lat: 35.68951,
-      lng: 139.69171,
-    });
+    resetMainPinMarker();
     addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
   });
-  document.body.append(popupSuccess);
 };
-
 
 const formSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
@@ -271,7 +259,7 @@ const formSubmit = () => {
     const formData = new FormData(evt.target);
 
     sendData(
-      () => createMessagesuccess(),
+      () => createMessageSuccess(),
       () => createMessageError(),
       formData,
     );
