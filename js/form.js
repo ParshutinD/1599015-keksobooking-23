@@ -1,6 +1,6 @@
-import {showAlert} from './util.js';
-import {getData,sendData} from './api.js';
-/* import {createMessagesuccess} from './map.js'; */
+/* eslint-disable id-length */
+import {sendData} from './api.js';
+
 
 // Форма объявления
 const adForm = document.querySelector('.ad-form');
@@ -14,8 +14,6 @@ const timeInInput = document.querySelector('#timein');
 const timeOutInput = document.querySelector('#timeout');
 const roomNumberSelect = document.querySelector('#room_number');
 const capacitySelect = document.querySelector('#capacity');
-const adDescription = document.querySelector('#description');
-const submitButton = document.querySelector('.ad-form__submit');
 const resetButton = document.querySelector('.ad-form__reset');
 
 // Фильтрация объявлений
@@ -36,6 +34,10 @@ const disableForm = function () {
   mapFiltersArr.forEach((element) => element.setAttribute('disabled', 'disabled'));
 };
 
+const disableFilterForm = function () {
+  mapFilters.classList.add('ad-form--disabled');
+  mapFiltersArr.forEach((element) => element.setAttribute('disabled', 'disabled'));
+};
 const activeForm = function () {
   adForm.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('ad-form--disabled');
@@ -164,7 +166,7 @@ const createMessageError = () => {
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       popupError.remove();
-    };
+    }
   });
   document.body.append(popupError);
 };
@@ -184,6 +186,54 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
+
+// Uploading avatar
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const fileChooserAvatar = document.querySelector('.ad-form__field input[type=file]');
+const previewAvatar = document.querySelector('.ad-form-header__preview img');
+
+fileChooserAvatar.addEventListener('change', () => {
+  const file = fileChooserAvatar.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      previewAvatar.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
+  }
+});
+
+//Uploading photos housing
+const fileChooserHousing = document.querySelector('.ad-form__upload input[type=file]');
+const previewHousing = document.querySelector('.ad-form__photo');
+
+fileChooserHousing.addEventListener('change', () => {
+  const file = fileChooserHousing.files[0];
+  const fileName = file.name.toLowerCase();
+  const createElement = document.createElement('img');
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      previewHousing.appendChild(createElement);
+      createElement.style.width= '70px';
+      createElement.style.height= '70px';
+      createElement.style.borderRadius= '10px';
+      createElement.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
+  }
+});
+
 const createMessagesuccess = () => {
   const successTemplate = document.querySelector('#success').content.querySelector('.success');
   const popupSuccess = successTemplate.cloneNode(true);
@@ -191,16 +241,20 @@ const createMessagesuccess = () => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       popupSuccess.remove();
       adForm.reset();
+      previewAvatar.src= 'img/muffin-grey.svg';
+      previewHousing.innerHTML='';
       mainPinMarker.setLatLng({
         lat: 35.68951,
         lng: 139.69171,
       });
       addressInput.value = `${Object.values(mainPinMarker._latlng)}`;
-    };
+    }
   });
   popupSuccess.addEventListener('mousedown', () => {
     popupSuccess.remove();
     adForm.reset();
+    previewAvatar.src= 'img/muffin-grey.svg';
+    previewHousing.innerHTML='';
     mainPinMarker.setLatLng({
       lat: 35.68951,
       lng: 139.69171,
@@ -227,5 +281,4 @@ const formSubmit = () => {
 };
 
 
-
-export{activeForm,addressInput,resetButton,formSubmit,adForm};
+export{activeForm,addressInput,resetButton,formSubmit,adForm,mapFilters,previewAvatar,previewHousing,disableFilterForm};

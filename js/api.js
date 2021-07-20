@@ -6,6 +6,7 @@ const getData = (onSuccess) => {
     .then((semilarAds) => {
       onSuccess(semilarAds);
     })
+
     .catch(() => showAlert('Не удалось загрузить данные с сервера. Попробуйте ещё раз'));
 };
 
