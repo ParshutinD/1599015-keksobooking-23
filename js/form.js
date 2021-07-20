@@ -157,18 +157,22 @@ const timeOutInputChange = function (evt) {
 timeInInput.addEventListener('change', timeInInputChange);
 timeOutInput.addEventListener('change', timeOutInputChange);
 
+const erorrTemplate = document.querySelector('#error').content.querySelector('.error');
+const popupError = erorrTemplate.cloneNode(true);
+
+const removePopupError = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    popupError.remove();
+  }
+};
+
 const createMessageError = () => {
-  const erorrTemplate = document.querySelector('#error').content.querySelector('.error');
-  const popupError = erorrTemplate.cloneNode(true);
+
   const errorBtn = popupError.querySelector('.error__button');
   errorBtn.addEventListener('click', () => {
     popupError.remove();
   });
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      popupError.remove();
-    }
-  });
+  document.addEventListener('keydown',removePopupError, { once: true });
   document.body.append(popupError);
 };
 
@@ -223,7 +227,7 @@ fileChooserHousing.addEventListener('change', () => {
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const popupSuccess = successTemplate.cloneNode(true);
 
-const removePopup = (evt) => {
+const removePopupSuccess = (evt) => {
   if (evt.key === 'Escape' || evt.key === 'Esc') {
     resetMainPinMarker();
     popupSuccess.remove();
@@ -236,7 +240,7 @@ const removePopup = (evt) => {
 
 const createMessageSuccess = () => {
   document.body.append(popupSuccess);
-  document.addEventListener('keydown', removePopup, { once: true });
+  document.addEventListener('keydown', removePopupSuccess, { once: true });
   popupSuccess.addEventListener('mousedown', () => {
     popupSuccess.remove();
     adForm.reset();
