@@ -112,34 +112,38 @@ const disableCapacityOption = function() {
   });
   capacitySelect.value = guestsInTheRoom[roomNumberSelect.value].value;
 };
+disableCapacityOption();
 
 roomNumberSelect.addEventListener('change',disableCapacityOption);
 
 //Валидация «Тип жилья»
 const typeHousing = {
-  'bungalow': {
-    value: 0,
-
+  bungalow: {
+    typeName: 'Бунгало',
+    price: 0,
   },
-  'flat': {
-    value: 1000,
-
+  flat: {
+    typeName: 'Квартира',
+    price: 1000,
   },
-  'hotel': {
-    value: 3000,
-
+  hotel: {
+    typeName: 'Отель',
+    price: 3000,
   },
-  'house': {
-    value: 5000,
-
+  house: {
+    typeName: 'Дом',
+    price: 5000,
   },
-  'palace': {
-    value: 10000,
+  palace: {
+    typeName: 'Дворец',
+    price: 10000,
   },
 };
 
-const choiceHousing = function () {
-  priceInput.value = typeHousing[typeInput.value].value;
+const choiceHousing = () => {
+  const minPriceValue = typeHousing[typeInput.value].price;
+  priceInput.setAttribute('placeholder', minPriceValue);
+  priceInput.setAttribute('min', minPriceValue);
 };
 
 typeInput.addEventListener('change', choiceHousing);

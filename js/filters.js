@@ -1,12 +1,14 @@
 import {createPinMarker,removeAllPins} from './map.js';
+
+const MAX_ADS_COUNT = 10;
+const DEFAULT_FILTER_VALUE = 'any';
+
 const mapFilters = document.querySelector('.map__filters');
 const housingTypeSelect = document.querySelector('#housing-type');
 const housingPriceSelect = document.querySelector('#housing-price');
 const housingRoomsSelect = document.querySelector('#housing-rooms');
 const housingGuestsSelect = document.querySelector('#housing-guests');
 
-const MAX_ADS_COUNT = 10;
-const DEFAULT_FILTER_VALUE = 'any';
 const priceMap = {
   low: {
     start: 0,
